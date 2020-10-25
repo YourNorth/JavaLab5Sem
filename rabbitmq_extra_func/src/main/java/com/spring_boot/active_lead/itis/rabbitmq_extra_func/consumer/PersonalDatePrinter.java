@@ -7,11 +7,13 @@ import com.spring_boot.active_lead.itis.rabbitmq_extra_func.service.CustomPdfWri
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class PersonalDatePrinter {
     private final static String PERSONAL_DATE = "doc.agreement.personalDate";
+    private static final String DOC_EXCHANGE = "doc_exchange";
 
     public static void main(String[] args) {
         ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -22,11 +24,12 @@ public class PersonalDatePrinter {
             Channel channel = connection.createChannel();
             // сколько неподтвержденных задач может брать на себя Consumer
             channel.basicQos(3);
+            channel.queueBind(PERSONAL_DATE, DOC_EXCHANGE, PERSONAL_DATE);
             channel.basicConsume(PERSONAL_DATE, true, (consumerTag, message) -> {
                 //Чтение данных о пользователе из Json
                 Person person = new ObjectMapper().readValue(message.getBody(), Person.class);
                 log.info("PersonalDatePrinter: Person is {}" + person.toString());
-                new CustomPdfWriterImpl().createPersonalDateAgreement("personal date agreement", person);
+                new CustomPdfWriterImpl().createPersonalDateAgreement("personal date agreement " + UUID.randomUUID(), person);
                 System.out.println("PersonalDatePrinter: document is ready");
             }, consumerTag -> {
             });

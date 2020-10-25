@@ -5,12 +5,16 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
-public class InfoProducer {
+@Slf4j
+public class InfoProducerDirect {
 
     private final static Scanner in = new Scanner(System.in);
     private final static String OUTPUT_FOR_NAME = "Введите имя: ";
@@ -43,6 +47,8 @@ public class InfoProducer {
         ROUTING_KEYS[0] = APPLY_ROUTING_KEY;
         ROUTING_KEYS[1] = APPLY_PLUS_EXTRA_WORK_ROUTING_KEY;
         ROUTING_KEYS[2] = ADVANCE_PLUS_EXTRA_WORK_ROUTING_KEY;
+
+        InfoProducerTopic topicProducer= new InfoProducerTopic();
         //создадим фабрику подключений к RMQ по локальной сети
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
@@ -65,19 +71,26 @@ public class InfoProducer {
             //Person person = Person.getFalsePerson();
             Person person = getPerson();
             //переводим ее в JSON
-            String result = new ObjectMapper().writeValueAsString(person);
+            String result = person.toJson();
             //Дебаги=)
             System.out.println(result);
 
             //Пользователем выбираются документы, которые ему необходимо распечатать
             boolean[] answers = chooseDoc();
             //тестовый массив:
-            /*boolean[] answers = new boolean[]{true,true,false};*/
+            //boolean[] answers = new boolean[]{false,false,false,true,true};
+            log.info("InfoProducerDirect: {}", Arrays.toString(answers));
             //в зависимости от ввода пользователя создаем те или иные документы
             for (int i = 0; i < ROUTING_KEYS.length; i++) {
                 if(answers[i]){
                     channel.basicPublish(STATEMENT_EXCHANGE, ROUTING_KEYS[i], null, result.getBytes());
                 }
+            }
+            if(answers[3]){
+                topicProducer.createAgreements(person);
+            }
+            if(answers[4]){
+                topicProducer.createStatements(person);
             }
             in.close();
         } catch (IOException | TimeoutException e) {
@@ -86,7 +99,7 @@ public class InfoProducer {
     }
 
     private static boolean[] chooseDoc(){
-        boolean[] answers = new boolean[3];
+        boolean[] answers = new boolean[5];
 
         System.out.println("Напишите да, если вы хотите распечатать заявления для принятия в штат:");
         answers[0]=checkAnswer(in.nextLine());
@@ -96,6 +109,13 @@ public class InfoProducer {
 
         System.out.println("Напишите да, если вы хотите распечатать заявление о получении аванса при дополнительных рабочих часах:");
         answers[2]=checkAnswer(in.nextLine());
+
+        System.out.println("Напишите да, если вы хотите распечатать все соглашения:");
+        answers[3]=checkAnswer(in.nextLine());
+
+        System.out.println("Напишите да, если вы хотите распечатать все заявления:");
+        answers[4]=checkAnswer(in.nextLine());
+
 
         return answers;
     }
