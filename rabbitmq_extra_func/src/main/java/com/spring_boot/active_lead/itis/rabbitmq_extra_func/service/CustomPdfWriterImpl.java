@@ -5,7 +5,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
@@ -18,34 +17,38 @@ public class CustomPdfWriterImpl implements CustomPdfWriter{
 
     @Override
     public void createPdfs(Person person) {
-        createDocumentOne("firstDoc", person);
-        createDocumentTwo("secondDoc", person);
-        createDocumentThree("thirdDoc", person);
+        createApplyAgreement("firstDoc", person);
+        createPersonalDateAgreement("secondDoc", person);
+        createAdvanceStatement("thirdDoc", person);
     }
 
     @Override
-    public void createDocumentOne(String fileName, Person person) {
-        StringBuffer fileContent = new StringBuffer();
-        fileContent.append("\t\tFIRST DOC\nHello, User!\nIt is document for ")
-                .append(getPersonInfo(person));
+    public void createApplyAgreement(String fileName, Person person) {
+        String fileContent = "APPLY AGREEMENT" +
+                getPersonInfo(person);
         createDocument(fileName, String.valueOf(fileContent));
     }
 
     @Override
-    public void createDocumentTwo(String fileName, Person person) {
-        StringBuffer fileContent = new StringBuffer();
-        fileContent.append("\t\tSECOND DOC\nHello, User!\nIt is document for ")
-                .append(getPersonInfo(person));
+    public void createPersonalDateAgreement(String fileName, Person person) {
+        String fileContent = "PERSONAL DATE AGREEMENT" +
+                getPersonInfo(person);
         createDocument(fileName, String.valueOf(fileContent));
     }
 
     @Override
-    public void createDocumentThree(String fileName, Person person) {
-        StringBuffer fileContent = new StringBuffer();
-        fileContent.append("    THIRD DOC\nHello, User!\nIt is document for ")
-                .append(getPersonInfo(person));
+    public void createAdvanceStatement(String fileName, Person person) {
+        String fileContent = "ADVANCE STATEMENT" +
+                getPersonInfo(person);
         createDocument(fileName, String.valueOf(fileContent));
     }
+
+    public void createExtraWorkAgreement(String fileName, Person person) {
+        String fileContent = "EXTRA WORK AGREEMENT" +
+                getPersonInfo(person);
+        createDocument(fileName, String.valueOf(fileContent));
+    }
+
     private void createDocument(String fileName, String fileContent) {
         try {
             Document document = new Document();
