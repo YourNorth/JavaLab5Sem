@@ -1,6 +1,5 @@
 package com.spring_boot.active_lead.itis.rabbitmq_extra_func.producer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -8,7 +7,6 @@ import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
@@ -49,6 +47,7 @@ public class InfoProducerDirect {
         ROUTING_KEYS[2] = ADVANCE_PLUS_EXTRA_WORK_ROUTING_KEY;
 
         InfoProducerTopic topicProducer= new InfoProducerTopic();
+        InfoProducerFanout fanoutProducer = new InfoProducerFanout();
         //создадим фабрику подключений к RMQ по локальной сети
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
@@ -68,17 +67,17 @@ public class InfoProducerDirect {
             channel.queueBind(EXTRA_WORK, STATEMENT_EXCHANGE, ADVANCE_PLUS_EXTRA_WORK_ROUTING_KEY);
             channel.queueBind(ADVANCE, STATEMENT_EXCHANGE, ADVANCE_PLUS_EXTRA_WORK_ROUTING_KEY);
             //создаем персону для тестирования
-            //Person person = Person.getFalsePerson();
-            Person person = getPerson();
+            Person person = Person.getFalsePerson();
+            //Person person = getPerson();
             //переводим ее в JSON
             String result = person.toJson();
             //Дебаги=)
             System.out.println(result);
 
             //Пользователем выбираются документы, которые ему необходимо распечатать
-            boolean[] answers = chooseDoc();
+            //boolean[] answers = chooseDoc();
             //тестовый массив:
-            //boolean[] answers = new boolean[]{false,false,false,true,true};
+            boolean[] answers = new boolean[]{false,false,false,false,false, true};
             log.info("InfoProducerDirect: {}", Arrays.toString(answers));
             //в зависимости от ввода пользователя создаем те или иные документы
             for (int i = 0; i < ROUTING_KEYS.length; i++) {
@@ -92,6 +91,9 @@ public class InfoProducerDirect {
             if(answers[4]){
                 topicProducer.createStatements(person);
             }
+            if(answers[5]){
+                fanoutProducer.createDocs(person);
+            }
             in.close();
         } catch (IOException | TimeoutException e) {
             throw new IllegalArgumentException(e);
@@ -99,7 +101,7 @@ public class InfoProducerDirect {
     }
 
     private static boolean[] chooseDoc(){
-        boolean[] answers = new boolean[5];
+        boolean[] answers = new boolean[6];
 
         System.out.println("Напишите да, если вы хотите распечатать заявления для принятия в штат:");
         answers[0]=checkAnswer(in.nextLine());
@@ -116,6 +118,8 @@ public class InfoProducerDirect {
         System.out.println("Напишите да, если вы хотите распечатать все заявления:");
         answers[4]=checkAnswer(in.nextLine());
 
+        System.out.println("Напишите да, если вы хотите распечатать рандомный документ:");
+        answers[5]=checkAnswer(in.nextLine());
 
         return answers;
     }

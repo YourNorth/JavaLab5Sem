@@ -14,6 +14,10 @@ import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class AdvancePrinter {
+
+    private static final String FANOUT_EXCHANGE = "exchange_fanout";
+    private static final String EXCHANGE_TYPE = "fanout";
+
     private final static String ADVANCE = "doc.statement.advance";
     private static final String DOC_EXCHANGE = "doc_exchange";
 
@@ -28,6 +32,7 @@ public class AdvancePrinter {
             channel.basicQos(3);
             //привязываем к topic exchange
             channel.queueBind(ADVANCE, DOC_EXCHANGE, ADVANCE);
+            channel.queueBind(ADVANCE, FANOUT_EXCHANGE, "");
             channel.basicConsume(ADVANCE, true, (consumerTag, message) -> {
                 //Чтение данных о пользователе из Json
                 Person person = new ObjectMapper().readValue(message.getBody(), Person.class);

@@ -17,6 +17,9 @@ public class ExtraWorkPrinter {
     private final static String EXTRA_WORK = "doc.agreement.extraWork";
     private static final String DOC_EXCHANGE = "doc_exchange";
 
+    private static final String FANOUT_EXCHANGE = "exchange_fanout";
+    private static final String EXCHANGE_TYPE = "fanout";
+
     public static void main(String[] args) {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
@@ -27,6 +30,7 @@ public class ExtraWorkPrinter {
             // сколько неподтвержденных задач может брать на себя Consumer
             channel.basicQos(3);
             channel.queueBind(EXTRA_WORK, DOC_EXCHANGE, EXTRA_WORK);
+            channel.queueBind(EXTRA_WORK, FANOUT_EXCHANGE, "");
             channel.basicConsume(EXTRA_WORK, true, (consumerTag, message) -> {
                 //Чтение данных о пользователе из Json
                 Person person = new ObjectMapper().readValue(message.getBody(), Person.class);
