@@ -1,9 +1,10 @@
-package com.spring_boot.active_lead.itis.rabbitmq_extra_func.producer;
+package com.spring_boot.active_lead.itis.rabbitmq_extra_func.service;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
+@Service
 public class InfoProducerTopic {
     private final static String APPLY = "doc.agreement.apply";
     private final static String PERSONAL_DATE = "doc.agreement.personalDate";
@@ -23,7 +25,7 @@ public class InfoProducerTopic {
 
     private Channel channel;
     
-    InfoProducerTopic() {
+    public InfoProducerTopic() {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
 

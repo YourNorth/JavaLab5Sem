@@ -1,20 +1,22 @@
-package com.spring_boot.active_lead.itis.rabbitmq_extra_func.producer;
+package com.spring_boot.active_lead.itis.rabbitmq_extra_func.service;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+@Service
 public class InfoProducerFanout {
 
     private static final String EXCHANGE_TYPE = "fanout";
     public static final String FANOUT_EXCHANGE = "exchange_fanout";
     Channel channel;
 
-    InfoProducerFanout(){
+    public InfoProducerFanout(){
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
 

@@ -1,0 +1,11 @@
+### Send POST request with json body
+POST http://localhost:8080/create1
+Content-Type: application/json
+
+{
+  "firstName":"wefwe",
+  "secondName":"wefwefwef",
+  "passwordNumber":"wef",
+  "age":"wefw",
+  "passwordIssue":"wefwefwef"
+}
