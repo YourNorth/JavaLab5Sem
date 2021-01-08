@@ -25,5 +25,5 @@
     db.user.updateOne({email: "monagon786@wgraj.com"}, {$set: {country:
         ObjectId("5ff83d5d35fbad3ae24b81f4")}});
     "
-6)   -
+6)   https://github.com/YourNorth/JavaLab5Sem/tree/master/mongodb
 7)   -
