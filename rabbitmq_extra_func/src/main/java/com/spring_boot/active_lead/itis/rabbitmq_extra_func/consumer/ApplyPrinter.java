@@ -7,12 +7,14 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.service.CustomPdfWriterImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 @Slf4j
+@Service
 public class ApplyPrinter {
     private final static String APPLY = "doc.agreement.apply";
     private final static String DOC_EXCHANGE = "doc_exchange";
@@ -21,7 +23,7 @@ public class ApplyPrinter {
     private static final String EXCHANGE_TYPE = "fanout";
 
 
-    public static void main(String[] args) {
+    public ApplyPrinter() {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
 

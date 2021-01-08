@@ -5,11 +5,13 @@ import com.rabbitmq.client.*;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.service.CustomPdfWriterImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
+@Service
 @Slf4j
 public class PersonalDatePrinter {
     private final static String PERSONAL_DATE = "doc.agreement.personalDate";
@@ -18,7 +20,7 @@ public class PersonalDatePrinter {
     private static final String FANOUT_EXCHANGE = "exchange_fanout";
     private static final String EXCHANGE_TYPE = "fanout";
 
-    public static void main(String[] args) {
+    public PersonalDatePrinter() {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
 

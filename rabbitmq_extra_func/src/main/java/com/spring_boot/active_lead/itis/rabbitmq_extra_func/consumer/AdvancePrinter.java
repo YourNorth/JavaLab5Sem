@@ -7,11 +7,13 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.service.CustomPdfWriterImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
+@Service
 @Slf4j
 public class AdvancePrinter {
 
@@ -21,7 +23,7 @@ public class AdvancePrinter {
     private final static String ADVANCE = "doc.statement.advance";
     private static final String DOC_EXCHANGE = "doc_exchange";
 
-    public static void main(String[] args) {
+    public AdvancePrinter() {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
 

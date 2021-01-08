@@ -7,11 +7,13 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.model.Person;
 import com.spring_boot.active_lead.itis.rabbitmq_extra_func.service.CustomPdfWriterImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
+@Service
 @Slf4j
 public class ExtraWorkPrinter {
     private final static String EXTRA_WORK = "doc.agreement.extraWork";
@@ -20,7 +22,7 @@ public class ExtraWorkPrinter {
     private static final String FANOUT_EXCHANGE = "exchange_fanout";
     private static final String EXCHANGE_TYPE = "fanout";
 
-    public static void main(String[] args) {
+    public ExtraWorkPrinter() {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
 
