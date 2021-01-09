@@ -5,7 +5,7 @@
 3) hateoas - https://github.com/YourNorth/jobboard/tree/master/Job_Board
     взял немного модифицированный проект с летней практики, добавил какое-то подобие логики
 4) annotation - https://github.com/YourNorth/JavaLab5Sem/tree/master/annotation/src/main/java/com/itis/spring_boot/active_lead/annotation
-    взял чужой код
+    взял чужой код, свой довести до рабочего состояния так и не смог
 5) mongoDb - репозитория нет, по понятным причинам, прикрепил код по созданию:
     "
     use jobboard
@@ -26,4 +26,4 @@
         ObjectId("5ff83d5d35fbad3ae24b81f4")}});
     "
 6)   https://github.com/YourNorth/JavaLab5Sem/tree/master/mongodb
-7)   -
+7)   https://github.com/YourNorth/JavaLab5Sem/tree/master/querydsl
