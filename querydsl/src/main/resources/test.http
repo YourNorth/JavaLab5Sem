@@ -1,0 +1,12 @@
+GET http://localhost:80/company/search?name=MachineFactory
+Accept: application/json
+
+
+###
+GET http://localhost:8080//company/search
+Content-Type: application/json
+
+{
+  "name" : "Twitterworks"}
+
+###
